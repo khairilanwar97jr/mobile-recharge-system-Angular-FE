@@ -17,13 +17,13 @@ export class Recharge {
   ) {}
 
 
-  getHistory(userId: number): Observable<any> {
+getHistory(userId: number): Observable<any> {
 
-    return this.http.get(
-      `${this.apiUrl}/${userId}`
-    );
+  return this.http.get(
+    `${this.apiUrl}/history/${userId}`
+  );
 
-  }
+}
 
 
   recharge(data: any): Observable<any> {

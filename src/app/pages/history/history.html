@@ -1,0 +1,30 @@
+<h1>Recharge History</h1>
+
+<table border="1">
+
+  <tr>
+    <th>ID</th>
+    <th>Phone</th>
+    <th>Package</th>
+    <th>Amount</th>
+    <th>Status</th>
+    <th>Date</th>
+  </tr>
+
+  <tr *ngFor="let item of transactions">
+
+    <td>{{ item.id }}</td>
+
+    <td>{{ item.phoneNumber }}</td>
+
+    <td>{{ item.packageName }}</td>
+
+    <td>RM {{ item.amount }}</td>
+
+    <td>{{ item.status }}</td>
+
+    <td>{{ item.createdAt }}</td>
+
+  </tr>
+
+</table>
