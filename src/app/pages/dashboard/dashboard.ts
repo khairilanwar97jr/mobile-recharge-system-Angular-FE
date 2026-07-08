@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Recharge } from '../../core/services/recharge';
 import { LoyaltyService } from '../../core/services/loyalty.service';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -12,20 +13,42 @@ import { LoyaltyService } from '../../core/services/loyalty.service';
 export class Dashboard implements OnInit {
   points = 0;
   recentHistory: any[] = [];
-  userId = 5;
+  userId: number | null = null;
 
   constructor(
     private loyaltyService: LoyaltyService,
-    private rechargeService: Recharge
+    private rechargeService: Recharge,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
+    this.userId = this.authService.getUserId() ?? 5;
     this.loadPoints();
     this.loadRecentHistory();
   }
 
+  private normalizeList(response: any): any[] {
+    if (Array.isArray(response)) {
+      return response;
+    }
+
+    if (Array.isArray(response?.content)) {
+      return response.content;
+    }
+
+    if (Array.isArray(response?.data)) {
+      return response.data;
+    }
+
+    if (Array.isArray(response?.history)) {
+      return response.history;
+    }
+
+    return [];
+  }
+
   loadPoints() {
-    this.loyaltyService.getPoints(this.userId).subscribe({
+    this.loyaltyService.getPoints(this.userId ?? 5).subscribe({
       next: (response) => {
         this.points = response?.points ?? response?.totalPoints ?? 0;
       },
@@ -36,9 +59,9 @@ export class Dashboard implements OnInit {
   }
 
   loadRecentHistory() {
-    this.rechargeService.getHistory(this.userId).subscribe({
+    this.rechargeService.getHistory(this.userId ?? 5).subscribe({
       next: (response) => {
-        this.recentHistory = Array.isArray(response) ? response.slice(0, 5) : [];
+        this.recentHistory = this.normalizeList(response).slice(0, 5);
       },
       error: (err) => {
         console.log(err);

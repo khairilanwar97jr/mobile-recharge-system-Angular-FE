@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Recharge } from '../../core/services/recharge';
+import { AuthService } from '../../core/services/auth.service';
 
 
 @Component({
@@ -23,7 +24,8 @@ export class RechargeComponent implements OnInit {
 
 
   constructor(
-    private rechargeService: Recharge
+    private rechargeService: Recharge,
+    private authService: AuthService
   ) {}
 
 
@@ -53,11 +55,9 @@ export class RechargeComponent implements OnInit {
 
 
     const data = {
-
+      userId: this.authService.getUserId() ?? 1,
       phoneNumber: this.phoneNumber,
-
       packageId: this.selectedPackageId
-
     };
 
 

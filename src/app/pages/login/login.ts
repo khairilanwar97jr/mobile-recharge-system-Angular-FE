@@ -46,6 +46,9 @@ export class Login {
             response.token
           );
           this.authService.saveUser(this.email);
+          this.authService.saveUserId(
+            response?.userId ?? response?.id ?? response?.user?.id ?? response?.user?.userId
+          );
 
           alert("Login success");
 

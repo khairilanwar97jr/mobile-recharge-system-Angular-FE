@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Recharge } from '../../core/services/recharge';
+import { AuthService } from '../../core/services/auth.service';
 
 
 @Component({
@@ -11,23 +12,24 @@ import { Recharge } from '../../core/services/recharge';
   templateUrl: './history.html',
   styleUrl: './history.css'
 })
-export class History {
+export class History implements OnInit {
 
 
   transactions: any[] = [];
 
 
-  // temporary user id for testing
-  userId = 5;
+  userId: number | null = null;
 
 
   constructor(
-    private rechargeService: Recharge
+    private rechargeService: Recharge,
+    private authService: AuthService
   ) {}
 
 
   ngOnInit() {
 
+    this.userId = this.authService.getUserId() ?? 5;
     this.loadHistory();
 
   }
@@ -37,14 +39,20 @@ export class History {
 
 
     this.rechargeService
-      .getHistory(this.userId)
+      .getHistory(this.userId ?? 5)
       .subscribe({
 
         next: (response) => {
 
           console.log(response);
 
-          this.transactions = response;
+          this.transactions = Array.isArray(response)
+            ? response
+            : Array.isArray(response?.content)
+              ? response.content
+              : Array.isArray(response?.data)
+                ? response.data
+                : [];
 
         },
 
