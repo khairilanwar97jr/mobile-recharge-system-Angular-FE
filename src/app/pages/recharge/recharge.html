@@ -1,27 +1,26 @@
-<h1>
-    Recharge
-</h1>
+<h1>Recharge</h1>
 
-
-<input
+<div>
+  <label for="phoneNumber">Phone Number</label>
+  <input
+    id="phoneNumber"
     placeholder="Phone Number"
     [(ngModel)]="phoneNumber"
-/>
+  />
+</div>
 
+<div>
+  <label for="packageSelect">Recharge Package</label>
 
-<br>
+  <select id="packageSelect" [(ngModel)]="selectedPackageId">
+    <option [ngValue]="null" disabled>Select a package</option>
 
+    <option *ngFor="let pkg of packages" [ngValue]="pkg.id">
+      {{ pkg.name }} - {{ pkg.amount }} {{ pkg.currency || 'USD' }}
+    </option>
+  </select>
+</div>
 
-<input
-    placeholder="Package ID"
-    type="number"
-    [(ngModel)]="packageId"
-/>
+<p *ngIf="isLoadingPackages">Loading packages...</p>
 
-
-<br>
-
-
-<button (click)="submitRecharge()">
-    Recharge
-</button>
+<button (click)="submitRecharge()">Recharge</button>

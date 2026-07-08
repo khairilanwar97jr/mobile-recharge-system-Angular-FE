@@ -1,0 +1,15 @@
+<div class="rewards-shell">
+  <h1>Rewards</h1>
+  <p>You currently have <strong>{{ points }}</strong> loyalty points.</p>
+
+  <div class="reward-list">
+    <div class="reward-card" *ngFor="let reward of rewards">
+      <h3>{{ reward.name }}</h3>
+      <p>{{ reward.description }}</p>
+      <p><strong>{{ reward.pointsRequired }} points</strong></p>
+      <button (click)="redeemReward(reward)" [disabled]="isRedeeming">
+        Redeem
+      </button>
+    </div>
+  </div>
+</div>

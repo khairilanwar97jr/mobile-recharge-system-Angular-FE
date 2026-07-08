@@ -45,7 +45,7 @@ export class Login {
           this.authService.saveToken(
             response.token
           );
-
+          this.authService.saveUser(this.email);
 
           alert("Login success");
 

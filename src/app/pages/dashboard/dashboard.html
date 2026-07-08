@@ -1,11 +1,36 @@
-<h1>
-    Mobile Recharge Dashboard
-</h1>
+<div class="dashboard-shell">
+  <h1>Mobile Recharge Dashboard</h1>
 
-<p>
-    Login successful 🎉
-</p>
+  <p>Welcome back! Your account is connected and ready.</p>
 
-<p>
-    JWT token stored.
-</p>
+  <div class="summary-grid">
+    <div class="summary-card">
+      <h3>Total Points</h3>
+      <p class="value">{{ points }}</p>
+    </div>
+
+    <div class="summary-card">
+      <h3>Recent Activity</h3>
+      <p class="value">{{ recentHistory.length }}</p>
+    </div>
+  </div>
+
+  <div class="actions">
+    <a routerLink="/recharge">Recharge</a>
+    <a routerLink="/history">History</a>
+    <a routerLink="/rewards">Rewards</a>
+  </div>
+
+  <section>
+    <h2>Recent Recharge History</h2>
+    <ul *ngIf="recentHistory.length; else noHistory">
+      <li *ngFor="let item of recentHistory">
+        {{ item.phoneNumber }} • {{ item.packageName }} • {{ item.status }}
+      </li>
+    </ul>
+
+    <ng-template #noHistory>
+      <p>No recent history yet.</p>
+    </ng-template>
+  </section>
+</div>

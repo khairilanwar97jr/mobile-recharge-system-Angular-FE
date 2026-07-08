@@ -1,1 +1,23 @@
-<router-outlet></router-outlet>
+<div class="app-shell">
+  @if (authService.isLoggedIn()) {
+    <nav class="top-nav">
+      <div class="brand">Mobile Recharge</div>
+
+      <div class="nav-links">
+        <a routerLink="/dashboard">Dashboard</a>
+        <a routerLink="/recharge">Recharge</a>
+        <a routerLink="/history">History</a>
+        <a routerLink="/rewards">Rewards</a>
+      </div>
+
+      <div class="user-area">
+        <span>Signed in as {{ authService.getUser() || 'User' }}</span>
+        <button type="button" class="logout-btn" (click)="logout()">Logout</button>
+      </div>
+    </nav>
+  }
+
+  <main class="content">
+    <router-outlet></router-outlet>
+  </main>
+</div>

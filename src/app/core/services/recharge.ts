@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 export class Recharge {
 
 
-  private apiUrl = 'http://localhost:8080/api/recharge';
+  private apiUrl = 'http://localhost:8080/api';
 
 
   constructor(
@@ -17,19 +17,28 @@ export class Recharge {
   ) {}
 
 
-getHistory(userId: number): Observable<any> {
+  getPackages(): Observable<any> {
 
-  return this.http.get(
-    `${this.apiUrl}/history/${userId}`
-  );
+    return this.http.get(
+      `${this.apiUrl}/packages`
+    );
 
-}
+  }
+
+
+  getHistory(userId: number): Observable<any> {
+
+    return this.http.get(
+      `${this.apiUrl}/recharge/history/${userId}`
+    );
+
+  }
 
 
   recharge(data: any): Observable<any> {
 
     return this.http.post(
-      this.apiUrl,
+      `${this.apiUrl}/recharge`,
       data
     );
 
