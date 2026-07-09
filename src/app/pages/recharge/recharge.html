@@ -5,6 +5,7 @@
   <input
     id="phoneNumber"
     placeholder="Phone Number"
+    name="phoneNumber"
     [(ngModel)]="phoneNumber"
   />
 </div>
@@ -12,11 +13,11 @@
 <div>
   <label for="packageSelect">Recharge Package</label>
 
-  <select id="packageSelect" [(ngModel)]="selectedPackageId">
+  <select id="packageSelect" name="packageSelect" [(ngModel)]="selectedPackageId">
     <option [ngValue]="null" disabled>Select a package</option>
 
     <option *ngFor="let pkg of packages" [ngValue]="pkg.id">
-      {{ pkg.name }} - {{ pkg.amount }} {{ pkg.currency || 'USD' }}
+      {{ pkg.packageName || pkg.name }} - RM{{ pkg.amount }}
     </option>
   </select>
 </div>

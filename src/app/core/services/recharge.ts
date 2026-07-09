@@ -20,7 +20,7 @@ export class Recharge {
   getPackages(): Observable<any> {
 
     return this.http.get(
-      `${this.apiUrl}/packages`
+      `${this.apiUrl}/recharge/packages`
     );
 
   }
@@ -39,7 +39,8 @@ export class Recharge {
 
     return this.http.post(
       `${this.apiUrl}/recharge`,
-      data
+      data,
+      { headers: { 'Content-Type': 'application/json' } }
     );
 
   }

@@ -53,35 +53,29 @@ export class RechargeComponent implements OnInit {
 
   submitRecharge() {
 
+    const packageId = Number(this.selectedPackageId);
+
+    if (!this.phoneNumber || !packageId) {
+      alert('Please enter a phone number and select a package');
+      return;
+    }
 
     const data = {
       userId: this.authService.getUserId() ?? 1,
-      phoneNumber: this.phoneNumber,
-      packageId: this.selectedPackageId
+      packageId: packageId,
+      phoneNumber: this.phoneNumber
     };
 
-
-    this.rechargeService.recharge(data)
-      .subscribe({
-
-        next: (response) => {
-
-          console.log(response);
-
-          alert('Recharge successful');
-
-        },
-
-        error: (err) => {
-
-          console.log(err);
-
-          alert('Recharge failed');
-
-        }
-
-      });
-
+    this.rechargeService.recharge(data).subscribe({
+      next: (response) => {
+        console.log(response);
+        alert('Recharge successful');
+      },
+      error: (err) => {
+        console.log(err);
+        alert('Recharge failed');
+      }
+    });
 
   }
 
