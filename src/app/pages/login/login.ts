@@ -46,9 +46,10 @@ export class Login {
             response.token
           );
           this.authService.saveUser(this.email);
-          this.authService.saveUserId(
-            response?.userId ?? response?.id ?? response?.user?.id ?? response?.user?.userId
-          );
+          const extractedUserId = response?.userId ?? response?.id ?? response?.user?.id ?? response?.user?.userId ?? this.authService.getUserId();
+          console.log('Login response:', response);
+          console.log('Extracted userId from response/token:', extractedUserId);
+          this.authService.saveUserId(extractedUserId);
 
           alert("Login success");
 

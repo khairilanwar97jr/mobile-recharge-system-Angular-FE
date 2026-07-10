@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LoyaltyService } from '../../core/services/loyalty.service';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-rewards',
@@ -11,18 +12,28 @@ import { LoyaltyService } from '../../core/services/loyalty.service';
 export class Rewards implements OnInit {
   rewards: any[] = [];
   points = 0;
-  userId = 5;
+  userId: number | null = null;
   isRedeeming = false;
 
-  constructor(private loyaltyService: LoyaltyService) {}
+  constructor(
+    private loyaltyService: LoyaltyService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit() {
+    this.userId = this.authService.getUserId();
     this.loadRewards();
     this.loadPoints();
   }
 
   loadPoints() {
-    this.loyaltyService.getPoints(this.userId).subscribe({
+    const userId = this.userId;
+    if (userId === null) {
+      console.log('User not logged in, cannot load points');
+      return;
+    }
+
+    this.loyaltyService.getPoints(userId).subscribe({
       next: (response) => {
         this.points = response?.points ?? response?.totalPoints ?? 0;
       },
@@ -51,7 +62,7 @@ export class Rewards implements OnInit {
 
     this.isRedeeming = true;
 
-    this.loyaltyService.redeemReward(this.userId, reward.id).subscribe({
+    this.loyaltyService.redeemReward(reward.id).subscribe({
       next: () => {
         this.isRedeeming = false;
         this.points -= reward.pointsRequired;

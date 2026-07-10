@@ -22,7 +22,7 @@ export class Dashboard implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.userId = this.authService.getUserId() ?? 5;
+    this.userId = this.authService.getUserId();
     this.loadPoints();
     this.loadRecentHistory();
   }
@@ -48,7 +48,12 @@ export class Dashboard implements OnInit {
   }
 
   loadPoints() {
-    this.loyaltyService.getPoints(this.userId ?? 5).subscribe({
+    if (this.userId === null) {
+      console.log('User not logged in, cannot load points');
+      return;
+    }
+
+    this.loyaltyService.getPoints(this.userId).subscribe({
       next: (response) => {
         this.points = response?.points ?? response?.totalPoints ?? 0;
       },
@@ -59,7 +64,12 @@ export class Dashboard implements OnInit {
   }
 
   loadRecentHistory() {
-    this.rechargeService.getHistory(this.userId ?? 5).subscribe({
+    if (this.userId === null) {
+      console.log('User not logged in, cannot load history');
+      return;
+    }
+
+    this.rechargeService.getHistory(this.userId).subscribe({
       next: (response) => {
         this.recentHistory = this.normalizeList(response).slice(0, 5);
       },

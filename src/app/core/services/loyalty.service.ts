@@ -6,19 +6,20 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class LoyaltyService {
-  private apiUrl = 'http://localhost:8080/api/loyalty';
+  private rewardsApiUrl = 'http://localhost:8080/api/rewards';
+  private loyaltyApiUrl = 'http://localhost:8080/api/loyalty';
 
   constructor(private http: HttpClient) {}
 
   getPoints(userId: number): Observable<any> {
-    return this.http.get(`${this.apiUrl}/points/${userId}`);
+    return this.http.get(`${this.loyaltyApiUrl}/points/${userId}`);
   }
 
   getRewards(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/rewards`);
+    return this.http.get(`${this.rewardsApiUrl}`);
   }
 
-  redeemReward(userId: number, rewardId: number): Observable<any> {
-    return this.http.post(`${this.apiUrl}/redeem`, { userId, rewardId });
+  redeemReward(rewardId: number): Observable<any> {
+    return this.http.post(`${this.rewardsApiUrl}/redeem`, { rewardId });
   }
 }

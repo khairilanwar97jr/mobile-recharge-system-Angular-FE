@@ -67,26 +67,25 @@ export class AuthService {
       return null;
     }
 
-    try {
-      const payload = token.split('.')[1];
-      const decoded = JSON.parse(atob(payload));
-      const candidateKeys = ['userId', 'id', 'user_id', 'sub', 'nameid'];
-
-      for (const key of candidateKeys) {
-        const value = decoded[key];
-        if (value !== undefined && value !== null && value !== '') {
-          const parsed = Number(value);
-          if (Number.isFinite(parsed)) {
-            return parsed;
-          }
-        }
-      }
-
-      return null;
-    } catch (error) {
-      console.log(error);
+    const decoded = this.decodeJwtPayload(token);
+    if (!decoded) {
       return null;
     }
+
+    const candidateKeys = ['userId', 'id', 'user_id', 'sub', 'nameid'];
+
+    for (const key of candidateKeys) {
+      const value = decoded[key];
+      if (value !== undefined && value !== null && value !== '') {
+        const parsed = Number(value);
+        if (Number.isFinite(parsed)) {
+          return parsed;
+        }
+      }
+    }
+
+    console.log('AuthService.getUserId: decoded token payload has no numeric user ID', decoded);
+    return null;
   }
 
   getToken(): string | null {
@@ -97,17 +96,25 @@ export class AuthService {
 
   }
 
-
-  logout(): void {
-
-    localStorage.removeItem(
-      'token'
-    );
-    localStorage.removeItem('user');
-    localStorage.removeItem('userId');
-
+  private decodeJwtPayload(token: string): any | null {
+    try {
+      const payload = token.split('.')[1];
+      const normalized = payload
+        .replace(/-/g, '+')
+        .replace(/_/g, '/')
+        .padEnd(Math.ceil(payload.length / 4) * 4, '=');
+      return JSON.parse(atob(normalized));
+    } catch (error) {
+      console.log('Failed to decode JWT payload', error);
+      return null;
+    }
   }
 
+  logout(): void {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    localStorage.removeItem('userId');
+  }
 
   isLoggedIn(): boolean {
 

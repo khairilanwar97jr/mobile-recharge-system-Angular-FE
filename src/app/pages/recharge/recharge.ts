@@ -54,15 +54,21 @@ export class RechargeComponent implements OnInit {
   submitRecharge() {
 
     const packageId = Number(this.selectedPackageId);
+    const userId = this.authService.getUserId();
 
     if (!this.phoneNumber || !packageId) {
       alert('Please enter a phone number and select a package');
       return;
     }
 
+    if (userId === null) {
+      alert('Please log in before recharging');
+      return;
+    }
+
     const data = {
-      userId: this.authService.getUserId() ?? 1,
-      packageId: packageId,
+      userId,
+      packageId,
       phoneNumber: this.phoneNumber
     };
 

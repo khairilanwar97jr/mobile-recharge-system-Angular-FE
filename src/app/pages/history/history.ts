@@ -29,7 +29,7 @@ export class History implements OnInit {
 
   ngOnInit() {
 
-    this.userId = this.authService.getUserId() ?? 5;
+    this.userId = this.authService.getUserId();
     this.loadHistory();
 
   }
@@ -38,8 +38,13 @@ export class History implements OnInit {
   loadHistory() {
 
 
+    if (this.userId === null) {
+      console.log('User not logged in, cannot load history');
+      return;
+    }
+
     this.rechargeService
-      .getHistory(this.userId ?? 5)
+      .getHistory(this.userId)
       .subscribe({
 
         next: (response) => {
